@@ -41,6 +41,7 @@ type
     RadioGroup1: TRadioGroup;
     Label7: TLabel;
     Edit7: TEdit;
+    Button11: TButton;
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -53,6 +54,7 @@ type
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
   private
     function ZapMQHandler(pMessage : TZapJSONMessage;
       var pProcessing : boolean) : TJSONObject;
@@ -90,6 +92,12 @@ begin
   end;
 end;
 
+procedure TFrmMain.Button11Click(Sender: TObject);
+begin
+  ZapMQWrapper.Log(otInformation, 'FrmMain.Button11Click', 'Example', 'Example Log');
+  Memo1.Lines.Add('*** Log Sended ***');
+end;
+
 procedure TFrmMain.Button1Click(Sender: TObject);
 begin
   ZapMQWrapper.Bind(Edit1.Text, ZapMQHandler);
@@ -103,7 +111,7 @@ var
 begin
   JSON := TJSONObject.Create;
   try
-    JSON.AddPair('message', 'Message to Send');
+    JSON.AddPair('message', 'publish');
     if ZapMQWrapper.SendMessage(Edit2.Text, JSON, StrToInt(Edit4.Text)) then
       Memo1.Lines.Add('*** Message Sended ***')
     else
@@ -131,7 +139,7 @@ var
 begin
   JSON := TJSONObject.Create;
   try
-    JSON.AddPair('RPC', 'RPC message recived');
+    JSON.AddPair('message', 'RPC');
     if ZapMQWrapper.SendRPCMessage(Edit2.Text, JSON, ZapMQHandlerRPC, StrToInt(Edit4.Text)) then
       Memo1.Lines.Add('*** RPC Message Sended '+ FormatDateTime('hh:mm:ss.zzz', now)+' ***')
     else
